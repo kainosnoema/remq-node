@@ -1,0 +1,24 @@
+{
+  "name": "remq",
+  "description": "Redis-backed persistent pub/sub message queue",
+  "version": "0.0.1",
+  "author": "Evan Owen <kainosnoema@gmail.com>",
+  "contributors": [
+  ],
+  "dependencies": {
+    "redis":   "0.7.x",
+    "hiredis": "0.1.x"
+  },
+  "devDependencies": {
+    "should": "*",
+    "mocha": "*"
+  },
+  "publishConfig": {},
+  "keywords": ["remq", "message", "queue", "mq", "redis", "pub/sub"],
+  "repository": "git://github.com/kainosnoema/remq-node",
+  "main": "index",
+  "scripts": {
+    "prepublish" : "npm prune"
+  },
+  "engines": { "node": "> 0.6.x" }
+}
