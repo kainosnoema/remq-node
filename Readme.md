@@ -4,6 +4,12 @@ A [Node.js](http://nodejs.org) client library for [Remq](https://github.com/kain
 
 NOTE: In early-stage development, API not locked.
 
+## Installation
+
+``` sh
+npm install remq
+```
+
 ## Usage
 
 **Producer:**
