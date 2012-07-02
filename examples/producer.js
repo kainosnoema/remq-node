@@ -1,8 +1,8 @@
 var remq = require('../lib/remq').createClient();
 
-// setInterval(queueMessages.bind(null, 1), 100);
+setInterval(queueMessages.bind(null, 1), 100);
 
-setInterval(queueMessages.bind(null, 20), 0);
+// setInterval(queueMessages.bind(null, 20), 0);
 
 function queueMessages(n) {
   for(var i = 0; i < n; i++) {
@@ -13,7 +13,7 @@ function queueMessages(n) {
 
   function handleResponse(err, id) {
     if(err) { return console.error(err); }
-    // console.log("Published '" + channel + "." + id +"'");
+    console.log("Published '" + channel + "." + id +"'");
   }
 }
 
