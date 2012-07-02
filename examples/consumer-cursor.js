@@ -5,7 +5,7 @@ var remq = require('../lib/remq').createClient()
 var count = 0, cursor = 0;
 
 remq.on('message', function(channel, message, id) {
-  console.log("'" + channel + "':");
+  console.log("'" + channel + "." + id + "':");
   console.log(require('util').inspect(message) + '\n');
   count++;
 });
