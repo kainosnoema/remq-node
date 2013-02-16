@@ -1,8 +1,12 @@
 # Remq-node
 
-A [Node.js](http://nodejs.org) client library for [Remq](https://github.com/kainosnoema/remq), a [Redis](http://redis.io)-based protocol for building fast, persistent pub/sub message queues.
+A [Node.js](http://nodejs.org) client library for
+[Remq](https://github.com/kainosnoema/remq), a [Redis](http://redis.io)-based
+protocol for building fast, durable message queues.
 
-NOTE: In early-stage development, API not locked.
+WARNING: In early-stage development, API not stable. If you've used a previous
+version, you'll most likely have to clear all previously published messages
+in order to upgrade to the latest version.
 
 ## Installation
 
@@ -17,56 +21,47 @@ npm install remq
 ``` js
 var remq = require('remq').createClient();
 
-var message = { event: 'signup', account_id: 694 };
+var message = JSON.stringify({ event: 'signup', account_id: 694 });
 
 remq.publish('events.accounts', message, function(err, id) {
   if(err) { return console.error(err); }
-  console.log("Published message to the 'events.accounts' channel with id: " + id);
+  console.log("Published message to 'events.accounts' with id: " + id);
 });
 ```
 
-**Pub/sub consumer (messages lost during failure):**
-
-``` js
-var remq = require('remq').createClient();
-
-remq.on('message', function(channel, message, id) {
-  console.log("Received message on the 'events.accounts' channel with id: " + id);
-  console.log("Account just signed up: " + message.account_id);
-});
-
-remq.subscribe('events.accounts');
-```
-
-**Polling consumer with cursor (resumes post-failure):**
+**Consumer:**
 
 ``` js
 var remq = require('remq').createClient()
-  , cursorKey = remq.key('cursor:consumer-1');
+  , lastIdKey = remq.key('cursor', 'consumer-1')
+  , lastId = 1;
 
-remq.on('message', function(channel, message, id) {
-  console.log("'" + channel + '.' + id + "':");
-  console.log(require('util').inspect(message) + '\n');
-  count++;
+remq.on('message', function(channel, message) {
+  lastId = message.id;
+
+  message.body = JSON.parse(message.body);
+  console.log("Received message on '" + channel + "' with id: " + message.id);
+  console.log("Account signed up with id: " + message.body.account_id);
 });
 
-// retrieve cursor and resume subscription at the cursor
-remq.redis.get(cursorKey, function(err, cursor) {
-  remq.subscribe('events.accounts', { cursor: cursor, interval: 1000 });
+remq.redis.get(lastIdKey, function(err, id) {
+  lastId = id;
+  remq.subscribe('events.*', { fromId: lastId || 1 });
 });
 
-// update cursor using the `cursor` event (emitted after poll)
-remq.on('cursor', function(cursor) { remq.redis.set(cursorKey, cursor); });
+// by persisting the lastId every second, a maximum of 1 second of
+// messages will be replayed in the case of consumer failure
+setInterval(function() { remq.redis.set(lastIdKey, lastId); }, 1000);
 ```
 
-**Purging old messages:**
+**Flush:**
 
 ``` js
 
-// purge old messages, keeping the last 1 million
-remq.purge('events.accounts', { keep: 10000000 }, function(err, num) {
+// flush old messages, keeping the last 1 million
+remq.flush('events.accounts', { keep: 10000000 }, function(err, num) {
   if(err) { return console.error(err); }
-  console.log("purged " + num + " messages from 'events.accounts'");
+  console.log("flushed " + num + " messages from 'events.accounts'");
 });
 
 ```

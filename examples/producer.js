@@ -1,33 +1,19 @@
-var remq = require('../lib/remq').createClient();
+var remq = require('../lib/remq').createClient()
+  , Message = require('./shared/message');
 
-setInterval(queueMessages.bind(null, 1), 100);
-
-// setInterval(queueMessages.bind(null, 20), 0);
-
-function queueMessages(n) {
+function publishMessages(n) {
   for(var i = 0; i < n; i++) {
-    var message = buildMessage()
-      , channel = 'events.' + message.type.toLowerCase();
-    remq.publish(channel, message, handleResponse);
+    publish(new Message());
   }
 
-  function handleResponse(err, id) {
-    if(err) { return console.error(err); }
-    console.log("Published '" + channel + "." + id +"'");
+  function publish(message) {
+    var channel = 'events.' + message.type.toLowerCase() + '.' + message.event;
+
+    remq.publish(channel, JSON.stringify(message), function(err, id) {
+      if(err) { return console.error(err); }
+      console.log("Published #" + id + " to channel '" + channel + "'");
+    });
   }
 }
 
-var events = ['create', 'update', 'delete']
-  , types = ['Account', 'Subscription', 'Transaction']
-  , id = 0;
-function buildMessage() {
-  var event = events[Math.floor(Math.random() * events.length)];
-  var type = types[Math.floor(Math.random() * types.length)];
-  return { event: event, type: type, attributes: {
-      account_id: id++
-    , first_name: 'Evan'
-    , last_name: 'Owen'
-    , state: 'active'
-    }
-  };
-}
+setInterval(publishMessages.bind(null, 1), 150);
