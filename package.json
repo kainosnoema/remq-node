@@ -1,7 +1,7 @@
 {
   "name": "remq",
   "description": "Redis-backed durable message queue",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Evan Owen <kainosnoema@gmail.com>",
   "contributors": [
   ],
@@ -14,7 +14,7 @@
     "should": "*"
   },
   "publishConfig": {},
-  "keywords": ["remq", "message", "queue", "mq", "redis", "pub/sub"],
+  "keywords": ["remq", "message", "bus", "queue", "mq", "redis", "pubsub", "pub/sub"],
   "repository": "git://github.com/kainosnoema/remq-node",
   "main": "index",
   "scripts": {
