@@ -12,17 +12,8 @@ describe('Remq.ReadableStream', function(){
 
   beforeEach(function(done) {
     if(stream) { stream.end(); }
-
-    // reconnect to test db
-    stream = require('../../lib/remq').createReadStream(channel);
-    stream.client.redis.select(2, function() {
-
-      // clear out any existing remq keys
-      stream.client.redis.keys('remq:*', function(err, keys) {
-        if(!keys.length) return done();
-        stream.client.redis.del(keys, done);
-      });
-    });
+    stream = require('../../lib/remq').createReadStream(channel, { db:2 });
+    stream.client.flushAll(done);
   });
 
   describe('`data` event', function(){

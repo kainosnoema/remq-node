@@ -21,17 +21,8 @@ describe('Remq', function(){
 
   beforeEach(function(done) {
     if(remq) { remq.end(); }
-
-    // reconnect to test db
-    remq = require('../lib/remq').createClient();
-    remq.redis.select(2, function() {
-
-      // clear out any existing remq keys
-      remq.redis.keys('remq:*', function(err, keys) {
-        if(!keys.length) return done();
-        remq.redis.del(keys, done);
-      });
-    });
+    remq = require('../lib/remq').createClient({ db: 2 });
+    remq.flushAll(done);
   });
 
   describe('#publish()', function(){
