@@ -1,7 +1,7 @@
 require('should');
 
 describe('Remq.ReadableStream', function(){
-  this.timeout(100);
+  this.timeout(500);
 
   var stream
     , channel = 'foo.1'
