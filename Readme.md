@@ -25,7 +25,6 @@ var message = JSON.stringify({ event: 'signup', account_id: 694 });
 
 remq.publish('events.accounts', message, function(err, id) {
   if(err) { return console.error(err); }
-  console.log("Published message to 'events.accounts' with id: " + id);
 });
 ```
 
@@ -40,6 +39,7 @@ remq.on('message', function(channel, message) {
   lastId = message.id;
 
   message.body = JSON.parse(message.body);
+
   console.log("Received message on '" + channel + "' with id: " + message.id);
   console.log("Account signed up with id: " + message.body.account_id);
 });

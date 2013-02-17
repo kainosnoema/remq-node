@@ -1,7 +1,7 @@
 require('should');
 
 describe('Remq', function(){
-  this.timeout(50); // no test should take very long
+  this.timeout(100); // no test should take very long
 
   var remq
     , channel = 'foo.1'
