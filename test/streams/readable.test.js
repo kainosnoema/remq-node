@@ -11,10 +11,11 @@ describe('Remq.ReadableStream', function(){
   function publish(done) { stream.client.publish(channel, body, done); }
 
   beforeEach(function(done) {
-    if(stream) { stream.end(); }
     stream = require('../../lib/remq').createReadStream(channel, { db:2 });
     stream.client.flushAll(done);
   });
+
+  afterEach(function() { stream.client.end(); });
 
   describe('`data` event', function(){
     it('calls listener with raw data and parsed message', function(done){

@@ -20,10 +20,11 @@ describe('Remq', function(){
   }
 
   beforeEach(function(done) {
-    if(remq) { remq.end(); }
     remq = require('../lib/remq').createClient({ db: 2 });
     remq.flushAll(done);
   });
+
+  afterEach(function() { remq.end(); });
 
   describe('#publish()', function(){
     it('publishes a message on the channel indicated', function(done){

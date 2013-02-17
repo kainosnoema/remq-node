@@ -11,10 +11,11 @@ describe('Remq.WritableStream', function(){
   function subscribe(done) { stream.client.subscribe(channel, {}, done); }
 
   beforeEach(function(done) {
-    if(stream) { stream.end(); }
     stream = require('../../lib/remq').createWriteStream(channel, { db: 2 });
     stream.client.flushAll(done);
   });
+
+  afterEach(function() { stream.client.end(); });
 
   describe('#write()', function(){
     it('publishes data as a message to channel', function(done){
