@@ -19,7 +19,7 @@
   "main": "index",
   "scripts": {
     "prepublish" : "npm prune",
-    "test": "mocha"
+    "test": "mocha $(find test -name '*.test.js')"
   },
   "engines": { "node": "> 0.6.x" }
 }
