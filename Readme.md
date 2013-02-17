@@ -58,10 +58,10 @@ setInterval(function() { remq.redis.set(lastIdKey, lastId); }, 1000);
 
 ``` js
 
-// flush old messages, keeping the last 1 million
-remq.flush('events.accounts', { keep: 10000000 }, function(err, num) {
+// flush old messages from before message with id=10000000
+remq.flush('events.*', { before: 10000000 }, function(err, num) {
   if(err) { return console.error(err); }
-  console.log("flushed " + num + " messages from 'events.accounts'");
+  console.log("flushed " + num + " messages from 'events.*'");
 });
 
 ```
