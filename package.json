@@ -22,5 +22,5 @@
     "prepublish" : "npm prune",
     "test": "mocha $(find test -name '*.test.js')"
   },
-  "engines": { "node": "> 0.6.x" }
+  "engines": { "node": "> 0.6.x < 0.9" }
 }
