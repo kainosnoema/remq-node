@@ -18,6 +18,7 @@
   "repository": "git://github.com/kainosnoema/remq-node",
   "main": "index",
   "scripts": {
+    "install": "git submodule update --init",
     "prepublish" : "npm prune",
     "test": "mocha $(find test -name '*.test.js')"
   },
