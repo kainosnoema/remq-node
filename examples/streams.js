@@ -6,11 +6,11 @@ var events = remq.createReadStream('events.*', {
   map: function(msg) { return '[' + msg.channel + '] ' + msg.body + '\n'; }
 });
 
-// log events, then write them to a log file
+// send events to stdout, then write them to a log file
 events.pipe(process.stdout);
 events.pipe(fs.createWriteStream('events-all.log', { flags: 'a' }));
 
-// pipe `events.foo` to `events.bar` (could be in another database)
+// pipe events from `events.foo` to `events.bar` (could be on another server)
 remq.createReadStream('events.foo').pipe(remq.createWriteStream('events.bar'));
 
 // write to `events.foo` every second
