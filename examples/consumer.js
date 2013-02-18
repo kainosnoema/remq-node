@@ -1,12 +1,12 @@
+process.env.DEBUG = 'remq:*';
+
 var remq = require('../lib/remq').createClient()
   , lastIdKey = remq.key('cursor', 'consumer-1')
   , lastId = -1;
 
 remq.on('message', function(pattern, message) {
   lastId = message.id;
-
-  message.body = JSON.parse(message.body);
-  console.log(require('util').inspect(message) + '\n');
+  console.log(message.body);
 });
 
 remq.redis.get(lastIdKey, function(err, id) {

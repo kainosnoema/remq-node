@@ -6,6 +6,7 @@
   "contributors": [
   ],
   "dependencies": {
+    "debug": "*",
     "redis":   "0.7.x",
     "hiredis": "0.1.x"
   },

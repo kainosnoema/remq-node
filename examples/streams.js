@@ -1,3 +1,5 @@
+process.env.DEBUG = 'remq:*';
+
 var fs = require('fs')
   , remq = require('../lib/remq');
 
@@ -6,15 +8,15 @@ var events = remq.createReadStream('events.*', {
   map: function(msg) { return '[' + msg.channel + '] ' + msg.body + '\n'; }
 });
 
-// send events to stdout, then write them to a log file
-events.pipe(process.stdout);
+// write all events to a log file
 events.pipe(fs.createWriteStream('events-all.log', { flags: 'a' }));
 
 // pipe events from `events.foo` to `events.bar` (could be on another server)
 remq.createReadStream('events.foo').pipe(remq.createWriteStream('events.bar'));
 
-// write to `events.foo` every second
-var writeStream = remq.createWriteStream('events.foo');
+// publish to `events.foo` every second
+var client = remq.createClient();
 setInterval(function() {
-  writeStream.write(new Date());
+  console.log();
+  client.publish('events.foo', new Date());
 }, 1000);

@@ -1,3 +1,5 @@
+process.env.DEBUG = 'remq:*';
+
 var remq = require('../lib/remq').createClient()
   , Message = require('./shared/message');
 
@@ -11,7 +13,6 @@ function publishMessages(n) {
 
     remq.publish(channel, JSON.stringify(message), function(err, id) {
       if(err) { return console.error(err); }
-      console.log("Published #" + id + " to channel '" + channel + "'");
     });
   }
 }
