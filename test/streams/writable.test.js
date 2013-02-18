@@ -26,6 +26,26 @@ describe('Remq.WritableStream', function(){
       subscribe();
       stream.write(body);
     });
+
+    context('with `map` function', function() {
+      beforeEach(function(done) {
+        var options = { db: 2, map: function(data) {
+          return JSON.parse(data)['data'];
+        }};
+
+        stream = require('../../lib/remq').createWriteStream(channel, options);
+        stream.client.flushAll(done);
+      });
+
+      it('is called on messages before emitting `data` event', function(done) {
+        stream.client.on('message', function(channel, message){
+          message.should.include({ body: body });
+          done();
+        });
+        subscribe();
+        stream.write(JSON.stringify({ data: body }));
+      });
+    });
   });
 
 });

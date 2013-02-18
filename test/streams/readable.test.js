@@ -11,7 +11,7 @@ describe('Remq.ReadableStream', function(){
   function publish(done) { stream.client.publish(channel, body, done); }
 
   beforeEach(function(done) {
-    stream = require('../../lib/remq').createReadStream(channel, { db:2 });
+    stream = require('../../lib/remq').createReadStream(channel, { db: 2 });
     stream.client.flushAll(done);
   });
 
@@ -25,6 +25,25 @@ describe('Remq.ReadableStream', function(){
         done();
       });
       publish();
+    });
+
+    context('with `map` function', function() {
+      beforeEach(function(done) {
+        var options = { db: 2, map: function(msg) {
+          return msg.id + ' ' + msg.body;
+        }};
+
+        stream = require('../../lib/remq').createReadStream(channel, options);
+        stream.client.flushAll(done);
+      });
+
+      it('is called on messages before emitting `data` event', function(done) {
+        stream.on('data', function(data, message) {
+          data.should.equal(message.id + ' ' + body);
+          done();
+        });
+        publish();
+      });
     });
   });
 
