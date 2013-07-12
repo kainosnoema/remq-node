@@ -1,14 +1,14 @@
 {
   "name": "remq",
   "description": "Redis-backed durable message queue",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Evan Owen <kainosnoema@gmail.com>",
   "contributors": [
   ],
   "dependencies": {
     "debug": "*",
-    "redis":   "0.7.x",
-    "hiredis": "0.1.x"
+    "redis":   "*",
+    "hiredis": "*"
   },
   "devDependencies": {
     "mocha": "*",
@@ -21,6 +21,5 @@
   "scripts": {
     "prepublish" : "git submodule update --init && npm prune",
     "test": "mocha $(find test -name '*.test.js')"
-  },
-  "engines": { "node": "> 0.6.x < 0.9" }
+  }  
 }
