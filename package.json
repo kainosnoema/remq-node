@@ -7,8 +7,8 @@
   ],
   "dependencies": {
     "debug": "*",
-    "redis":   "0.7.x",
-    "hiredis": "0.1.x"
+    "redis":   "*",
+    "hiredis": "*"
   },
   "devDependencies": {
     "mocha": "*",
@@ -21,6 +21,5 @@
   "scripts": {
     "prepublish" : "git submodule update --init && npm prune",
     "test": "mocha $(find test -name '*.test.js')"
-  },
-  "engines": { "node": "> 0.6.x < 0.9" }
+  }  
 }
